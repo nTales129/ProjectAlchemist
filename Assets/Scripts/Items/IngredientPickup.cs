@@ -17,11 +17,18 @@ public class IngredientPickup : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Ajuste a tag "Player" conforme o nome usado no seu GameObject do jogador.
         if (!other.CompareTag("Player"))
             return;
 
-        Debug.Log("Coletou " + ingredientData.ingredientName);
+        Inventory inventory = other.GetComponentInParent<Inventory>();
+
+        if (inventory == null)
+        {
+            Debug.LogWarning("O Player não possui um Inventory.");
+            return;
+        }
+
+        inventory.AddIngredient(ingredientData.ingredientName);
 
         Destroy(gameObject);
     }
