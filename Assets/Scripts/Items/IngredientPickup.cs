@@ -28,7 +28,8 @@ public class IngredientPickup : MonoBehaviour
             return;
         }
 
-        inventory.AddIngredient(ingredientData.ingredientName);
+        if (!inventory.TryAddIngredient(ingredientData.ingredientName))
+            return;
 
         Destroy(gameObject);
     }
