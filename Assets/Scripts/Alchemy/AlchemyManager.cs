@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Inventory))]
 public class AlchemyManager : MonoBehaviour
@@ -37,5 +38,18 @@ public class AlchemyManager : MonoBehaviour
         inventory.TryAddPotion(recipe.potionName);
 
         Debug.Log("Produziu " + recipe.potionName + "!");
+
+        if (recipeBook.DiscoverRecipe(recipe))
+        {
+            Debug.Log("Nova receita descoberta!");
+        }
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current != null && Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            recipeBook.PrintDiscoveredRecipes();
+        }
     }
 }
