@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,13 +19,7 @@ public class Cauldron : MonoBehaviour
                 return;
             }
 
-            List<string> testIngredients = new List<string>
-            {
-                "Erva Verde",
-                "Cogumelo Azul"
-            };
-
-            alchemyManager.CraftPotion(testIngredients);
+            alchemyManager.CraftSelectedIngredients();
         }
     }
 
