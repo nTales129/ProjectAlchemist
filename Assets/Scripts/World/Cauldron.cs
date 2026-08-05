@@ -5,6 +5,12 @@ public class Cauldron : MonoBehaviour
 {
     private bool playerInRange;
     private AlchemyManager alchemyManager;
+    private AlchemyUI alchemyUI;
+
+    private void Awake()
+    {
+        alchemyUI = FindFirstObjectByType<AlchemyUI>();
+    }
 
     private void Update()
     {
@@ -19,7 +25,20 @@ public class Cauldron : MonoBehaviour
                 return;
             }
 
-            alchemyManager.CraftSelectedIngredients();
+            if (alchemyUI == null)
+            {
+                Debug.LogWarning("Não foi encontrado um AlchemyUI na cena.");
+                return;
+            }
+
+            if (alchemyUI.IsOpen)
+            {
+                alchemyUI.Close();
+            }
+            else
+            {
+                alchemyUI.Open(alchemyManager);
+            }
         }
     }
 
@@ -39,5 +58,10 @@ public class Cauldron : MonoBehaviour
 
         playerInRange = false;
         alchemyManager = null;
+
+        if (alchemyUI != null && alchemyUI.IsOpen)
+        {
+            alchemyUI.Close();
+        }
     }
 }

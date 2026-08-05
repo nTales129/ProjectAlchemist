@@ -18,25 +18,7 @@ public class AlchemyManager : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current == null)
-            return;
-
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
-        {
-            SelectIngredient("Erva Verde");
-        }
-
-        if (Keyboard.current.digit2Key.wasPressedThisFrame)
-        {
-            SelectIngredient("Cogumelo Azul");
-        }
-
-        if (Keyboard.current.rKey.wasPressedThisFrame)
-        {
-            ClearSelectedIngredients();
-        }
-
-        if (Keyboard.current.lKey.wasPressedThisFrame)
+        if (Keyboard.current != null && Keyboard.current.lKey.wasPressedThisFrame)
         {
             recipeBook.PrintDiscoveredRecipes();
         }
@@ -120,5 +102,15 @@ public class AlchemyManager : MonoBehaviour
         {
             Debug.Log("- " + ingredientName);
         }
+    }
+    public string GetSelectedIngredientsText()
+    {
+        if (selectedIngredients.Count == 0)
+        {
+            return "Nenhum ingrediente selecionado.";
+        }
+
+        return "Ingredientes selecionados:\n- " +
+               string.Join("\n- ", selectedIngredients);
     }
 }
