@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Inventory : MonoBehaviour
 {
@@ -10,6 +10,8 @@ public class Inventory : MonoBehaviour
     private List<string> potions = new List<string>();
 
     private int UsedSpace => ingredients.Count + potions.Count;
+
+    public event Action OnInventoryChanged;
 
     public bool TryAddIngredient(string ingredientName)
     {
@@ -21,6 +23,8 @@ public class Inventory : MonoBehaviour
 
         ingredients.Add(ingredientName);
         Debug.Log("Coletou " + ingredientName);
+
+        NotifyInventoryChanged();
         return true;
     }
 
@@ -33,6 +37,8 @@ public class Inventory : MonoBehaviour
         }
 
         potions.Add(potionName);
+
+        NotifyInventoryChanged();
         return true;
     }
 
@@ -57,31 +63,48 @@ public class Inventory : MonoBehaviour
             return false;
 
         ingredients.RemoveAt(ingredientIndex);
+
+        NotifyInventoryChanged();
         return true;
     }
 
-    public void PrintIngredients()
+    public string GetInventoryText()
     {
-        Debug.Log("Inventário (" + UsedSpace + "/" + capacity + ")");
+        string text = "Inventário (" + UsedSpace + "/" + capacity + ")";
 
-        Debug.Log("Ingredientes:");
-        foreach (string ingredientName in ingredients)
+        text += "\n\nIngredientes";
+
+        if (ingredients.Count == 0)
         {
-            Debug.Log("- " + ingredientName);
+            text += "\n- Nenhum";
+        }
+        else
+        {
+            foreach (string ingredientName in ingredients)
+            {
+                text += "\n- " + ingredientName;
+            }
         }
 
-        Debug.Log("Poções:");
-        foreach (string potionName in potions)
+        text += "\n\nPoções";
+
+        if (potions.Count == 0)
         {
-            Debug.Log("- " + potionName);
+            text += "\n- Nenhuma";
         }
+        else
+        {
+            foreach (string potionName in potions)
+            {
+                text += "\n- " + potionName;
+            }
+        }
+
+        return text;
     }
 
-    private void Update()
+    private void NotifyInventoryChanged()
     {
-        if (Keyboard.current != null && Keyboard.current.iKey.wasPressedThisFrame)
-        {
-            PrintIngredients();
-        }
+        OnInventoryChanged?.Invoke();
     }
 }
